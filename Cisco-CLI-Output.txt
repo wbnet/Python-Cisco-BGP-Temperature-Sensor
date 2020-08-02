@@ -1,0 +1,66 @@
+Cisco-CLI-Output.txt
+
+---- When hot ----
+
+LabSW4#traceroute 10.1.1.1
+Type escape sequence to abort.
+Tracing the route to 10.1.1.1
+VRF info: (vrf in name/id, vrf out name/id)
+  1 10.0.24.2 8 msec 0 msec 0 msec
+  2 10.0.12.1 [AS 200] 8 msec 0 msec 0 msec
+
+---- When cold ----
+
+LabSW4#traceroute 10.1.1.1
+Type escape sequence to abort.
+Tracing the route to 10.1.1.1
+VRF info: (vrf in name/id, vrf out name/id)
+  1 10.0.34.3 0 msec 9 msec 0 msec
+  2 10.0.13.1 [AS 300] 8 msec 0 msec 0 msec
+
+
+---- When hot ----
+
+LabSW4#show ip bgp 10.1.1.1
+BGP routing table entry for 10.1.1.0/24, version 19
+Paths: (2 available, best #2, table default)
+Multipath: eBGP
+  Advertised to update-groups:
+     3         
+  300 100
+    10.0.34.3 from 10.0.34.3 (10.3.3.3)
+      Origin IGP, localpref 20, valid, external
+  200 100
+    10.0.24.2 from 10.0.24.2 (10.2.2.2)
+      Origin IGP, localpref 24, valid, external, best
+
+---- When cold ----
+
+LabSW4#show ip bgp 10.1.1.1
+BGP routing table entry for 10.1.1.0/24, version 14
+Paths: (2 available, best #1, table default)
+Multipath: eBGP
+  Advertised to update-groups:
+     3         
+  300 100
+    10.0.34.3 from 10.0.34.3 (10.3.3.3)
+      Origin IGP, localpref 20, valid, external, best
+  200 100
+    10.0.24.2 from 10.0.24.2 (10.2.2.2)
+      Origin IGP, localpref 15, valid, external
+
+
+---- Python script output ----
+
+Temp: 75.9 F / 24.4 C    Humidity: 53.8% 
+24.4
+24
+24
+
+LabSW4#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+LabSW4(config)#route-map rm_as_200_in
+LabSW4(config-route-map)#set local-preference 24
+LabSW4(config-route-map)#end
+LabSW4#clear ip bgp * soft
+LabSW4#exit
