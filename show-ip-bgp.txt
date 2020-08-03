@@ -1,0 +1,30 @@
+# BGP routing table on Cisco switch when temperature is "hot".
+# Note local-preference (LocPrf) values.
+
+# Route to subnet 10.3.3.0/24 is via AS 200,
+# even though only 1 AS (autonomous system) away via AS 300.
+
+
+LabSW4#show ip bgp 
+BGP table version is 11, local router ID is 10.4.4.4
+Status codes: s suppressed, d damped, h history, * valid, > best, i - internal,
+              r RIB-failure, S Stale, m multipath, b backup-path, x best-external, f RT-Filter
+Origin codes: i - IGP, e - EGP, ? - incomplete
+
+   Network          Next Hop            Metric LocPrf Weight Path
+*  10.0.12.0/24     10.0.34.3                      20      0 300 100 i
+*>                  10.0.24.2                0     24      0 200 i
+*  10.0.13.0/24     10.0.34.3                0     20      0 300 i
+*>                  10.0.24.2                      24      0 200 100 i
+*> 10.0.24.0/24     0.0.0.0                  0         32768 i
+*                   10.0.24.2                0     24      0 200 i
+*> 10.0.34.0/24     0.0.0.0                  0         32768 i
+*                   10.0.34.3                0     20      0 300 i
+*  10.1.1.0/24      10.0.34.3                      20      0 300 100 i
+*>                  10.0.24.2                      24      0 200 100 i
+*  10.2.2.0/24      10.0.34.3                      20      0 300 100 200 i
+*>                  10.0.24.2                0     24      0 200 i
+*  10.3.3.0/24      10.0.34.3                0     20      0 300 i
+*>                  10.0.24.2                      24      0 200 100 300 i
+*> 10.4.4.0/24      0.0.0.0                  0         32768 i
+LabSW4#
