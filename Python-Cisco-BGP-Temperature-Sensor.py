@@ -1,9 +1,10 @@
 import time
 import board
 import adafruit_dht
-
 import getpass
 import telnetlib
+
+# Read temperature from DHT22 sensor
 
 # Initial the dht device, with data pin connected to:
 dhtDevice = adafruit_dht.DHT22(board.D4)
@@ -26,7 +27,6 @@ while True:
 
 
     myTemp = temperature_c
-    # myTemp = myTemp - 20
     print(myTemp)
 
     myTemp = round(myTemp)
@@ -40,10 +40,12 @@ while True:
     HOST = "10.10.10.10"
     # user = input("Enter your username: ")
     # password = getpass.getpass()
+    
+    # Do not store passwords in your code.
+    # Move username and password prompt outside of loop.
 
     user = "dave"
     password = "MyPass"
-    # myTemp = 10
 
     tn = telnetlib.Telnet(HOST)
 
@@ -57,7 +59,8 @@ while True:
 
     tn.write(b"conf t\n")
     tn.write(b"route-map rm_as_200_in\n")
-
+    
+    # Test code without variable
     # tn.write(b"set local-preference 20\n")
 
     # tn.write(b"set local-preference {0}\n".format(temperature))
@@ -67,9 +70,8 @@ while True:
     # myBytes = myConfig.encode('utf-8')
     myBytes = myConfig.encode()
 
-    # tn.write(b"%s" % myConfig)
     tn.write(b"%s" % myBytes)
-
+    
     tn.write(b"end\n")
     tn.write(b"clear ip bgp * soft\n")
 
